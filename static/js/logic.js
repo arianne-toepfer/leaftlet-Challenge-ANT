@@ -61,3 +61,30 @@ d3.json(url, function(response) {
         }).bindPopup("<h3> Magnitude: " + coords.coordinates[2] + "</h3>").addTo(myMap);
     }
 });
+// Set up the legend
+var legend = L.control({ position: "bottomright" });
+legend.onAdd = function() {
+  var div = L.DomUtil.create("div", "info legend");
+  var limits = [90,70,50,30,10,-10];
+  var colors = ["red", "DarkOrange", "Orange", "Gold", "GreenYellow", "Chartreuse"];
+  var labels = [];
+
+  // Add min & max
+  var legendInfo = "<h3>Magnitude</h3>" +
+        "<div class=\"labels\">" +
+        "<div class=\"min\">" + limits[0] + "</div>" +
+        "<div class=\"max\">" + limits[limits.length - 1] + "</div>" +
+    "</div>";
+
+  div.innerHTML = legendInfo;
+
+  limits.forEach(function(limit, index) {
+    labels.push("<li style=\"background-color: " + colors[index] + "\"></li>");
+  });
+
+  div.innerHTML += "<ul>" + labels.join("") + "</ul>";
+  return div;
+};
+
+// Adding legend to the map
+legend.addTo(myMap);

@@ -33,15 +33,31 @@ d3.json(url, function(response) {
     for (var i = 0; i < response.length; i++){
         var color = "";
         var coords = response[i].features.geometry;
-    if (coords[i].coordinates[2]<10){
-        color = "green";
+        if (coords.coordinates[2] > 90){
+            color = "red";
+        }
+        else if (coords.coordinates[2] > 70){
+            color="DarkOrange";
+        }
+        else if (coords.coordinates[2] > 50){
+            color="Orange";
+        }
+        else if (coords.coordinates[2] > 30){
+            color="Gold";
+        }
+        else if (coords.coordinates[2] > 10){
+            color="GreenYellow";
+        }
+        else {
+            color="Chartreuse";
+        }
+        // Add circles to map
+        L.circle([coords.coordinates[1], coords.coordinates[0]], {
+            fillOpacity: 0.75,
+            color: "white",
+            fillColor: color,
+            // Adjust radius
+            radius: markerSize(coords.coordinates[2])
+        }).bindPopup("<h3> Magnitude: " + coords.coordinates[2] + "</h3>").addTo(myMap);
     }
-};        
-    //     coordArray.push([coords[i].coordinates[1], coords[i].coordinates[0]]);
-
-    //      L.circle(coordArray[1],{
-    //          fillOpacity: 0.75,
-    //          color: "white",
-    //          fillColor: "green",
-    //          radius: markerSize(coords.coordinates[2])
-    //      }).bindPopup("<h3> Magnitude: " + response[i].features.properties.mag + "</h3>").addTo(myMap)
+});

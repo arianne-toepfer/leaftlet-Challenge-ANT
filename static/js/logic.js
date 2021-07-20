@@ -31,17 +31,17 @@ d3.json(url, function(response) {
  
     //create loop to pull the data from the geojson
     for (var i = 0; i < response.length; i++){
+        var color = "";
         var coords = response[i].features.geometry;
-        
-        coordArray.push([coords[i].coordinates[1], coords[i].coordinates[0]]);
-
-        // L.circle(coordArray[1],{
-        //     fillOpacity: 0.75,
-        //     color: "white",
-        //     fillColor: "green",
-        //     radius: markerSize(coords.coordinates[2])
-        // }).bindPopup("<h3> Magnitude: " + response[i].features.properties.mag + "</h3>").addTo(myMap);
+    if (coords[i].coordinates[2]<10){
+        color = "green";
     }
-    console.log(coordArray);
+};        
+    //     coordArray.push([coords[i].coordinates[1], coords[i].coordinates[0]]);
 
-}); 
+    //      L.circle(coordArray[1],{
+    //          fillOpacity: 0.75,
+    //          color: "white",
+    //          fillColor: "green",
+    //          radius: markerSize(coords.coordinates[2])
+    //      }).bindPopup("<h3> Magnitude: " + response[i].features.properties.mag + "</h3>").addTo(myMap)

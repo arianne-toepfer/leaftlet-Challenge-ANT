@@ -72,7 +72,7 @@ d3.json(url, function(data) {
     var magLayer = L.geoJson(magData, {
         style: CreateFeatures,
         pointToLayer: function(feature, coord) {
-            return new L.CircleMarker(coord);
+            return new L.Circle(coord)
         },
         onEachFeature: function(feature, layer) {
             layer.bindPopup("<h3> Magnitude: " + feature.properties.mag + "</h3>")

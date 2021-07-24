@@ -23,8 +23,24 @@ d3.json(url, function(data) {
  
     //Define features
     function CreateFeatures(magData) {
-        return magData.geometry.coordinates[2];
+        return {color: colorCoord(magData.geometry.coordinates[2]), 
+            radius: markerSize(magData.properties.mag)
+        }
     }
+
+    //Define Lat/Long
+    // Initialize an array to hold coordinates
+    var coord = [];
+
+    // Loop through the stations array
+    for (var index = 0; index < data.length; index++) {
+        var dataSpot = data[index];
+        var coordPair = ([dataSpot.geometry.coordinates[1], dataSpot.geometry.coordinates[0]])
+
+        // Add to array
+        coordPair.push(coord);
+    };
+
     //create conditionals based on magnitude    
     function colorCoord(magData) {    
         var color = "";
@@ -53,17 +69,19 @@ d3.json(url, function(data) {
     }
 
     // Add circles to map
-    
-
-    L.circle([coords.coordinates[1], coords.coordinates[0]], {
-        fillOpacity: 0.75,
-        color: "white",
-        fillColor: color,
-        // Adjust radius
-        radius: markerSize(coords.coordinates[2])
-    }).bindPopup("<h3> Magnitude: " + coords.coordinates[2] + "</h3>").addTo(myMap);
+    var magLayer = L.geoJson(magData, {
+        style: CreateFeatures,
+        pointToLayer: function(feature, coord) {
+            return new L.CircleMarker(coord);
+        },
+        onEachFeature: function(feature, layer) {
+            layer.bindPopup("<h3> Magnitude: " + feature.properties.mag + "</h3>")
+        }
+    })
     
 });
+myMap.addlayer(magLayer);
+
 // Set up the legend
 var legend = L.control({ position: "bottomright" });
 legend.onAdd = function() {
